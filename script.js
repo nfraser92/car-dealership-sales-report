@@ -118,19 +118,44 @@ outputEl.innerHTML += `<h1>Weekly Sales Report</h1>`
 
 salesByWeek.forEach(sale => {
 
-let salesAgent =
-outputEl.innerHTML += `
+    let salesAgent =
+        outputEl.innerHTML += `
 <h2>${sale.sales_agent.first_name} ${sale.sales_agent.last_name}</h2>
 `
 
 
-let vehicle = ""
-for (const entry of Object.entries(sale.vehicle)) {
-    vehicle += `<div>${entry[0]} ${entry[1]}</div>`
-}
+    let vehicle = ""
+    for (const entry of Object.entries(sale.vehicle)) {
+        vehicle += `<div>${entry[0]} ${entry[1]}</div>`
+    }
 
-let profit = `${sale.gross_profit}`
-outputEl.innerHTML =`<div>${salesAgent} ${vehicle} Gross Profit: $${profit}</div>`
+    let profit = `${sale.gross_profit}`
+    outputEl.innerHTML = `<div>${salesAgent} ${vehicle} Gross Profit: $${profit}</div>`
+})
+
+const searchInput = document.querySelector("#searchInput")
+let results = document.querySelector("#cars")
+searchInput.addEventListener('keypress', (event) => {
+    if (event.charCode === 13) {
+        cars.innerHTML += ""
+        const searchTerm = event.target.value
+
+        salesByWeek.forEach(sale => {
+            let agent = sale.sales_agent
+
+            for (const value of Object.values(agent)) {
+                if (value.includes(searchTerm)) {
+                    cars.innerHTML = ""
+                    cars.innerHTML += `
+                <h2>${agent.first_name} ${agent.last_name}</h2>
+                <div>${agent.email}</div>
+                <div>${sale.gross_profit}</div>
+                `
+                cars.innerHTML += "<hr/>"
+                }
+            }
+        });
+    }
 })
 
 
